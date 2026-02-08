@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Proposal</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6eb;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden; 
+        }
+
+        .box {
+            text-align: center;
+            background: white;
+            padding: 45px;
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            width: 425px; 
+            max-width: 90%; 
+            position: relative;
+            z-index: 100;
+        }
+
+        h1 {
+            color: #e6005c;
+            font-size: 28px; 
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 220px; 
+            height: 220px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px; 
+            margin-top: 25px;
+            position: relative; 
+        }
+
+        button, input[type="submit"] {
+            padding: 14px 30px; 
+            font-size: 18px; 
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            font-weight: bold;
+        }
+
+        #yes {
+            background-color: #ff4d79;
+            color: white;
+            z-index: 10;
+        }
+        
+        #yes:hover {
+            background-color: #e6005c; 
+            transform: scale(1.05); 
+        }
+
+        #no {
+            background-color: #999;
+            color: white;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <img id="graphic" src="asking.gif" alt="Cute bear">
+        
+        <h1 id="question">Shaona, Will you be my Valentine?❤️</h1>
+
+        <form action="https://formspree.io/f/xpqjzkvb" method="POST" id="valentineForm">
+            <input type="hidden" name="Response" value="Shaona said YES! 🎉">
+            
+            <div class="buttons">
+                <input type="submit" id="yes" value="Yes">
+                <button type="button" id="no">No</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('no');
+        const question = document.getElementById('question');
+        const graphic = document.getElementById('graphic');
+        const form = document.getElementById('valentineForm');
+        
+        // NO BUTTON MOVEMENT
+        noButton.addEventListener('mouseover', () => {
+            const maxX = window.innerWidth - noButton.offsetWidth - 50;
+            const maxY = window.innerHeight - noButton.offsetHeight - 50;
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noButton.style.position = 'fixed'; 
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        });
+
+        // YES BUTTON ACTION
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            // Confetti
+            const duration = 3000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d79', '#ff0000'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d79', '#ff0000'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+            // --- THIS IS THE MESSAGE YOU CHANGED ---
+            question.innerHTML = "Thank you for accepting. I love you, dulaar❤️";
+            
+            // Using your verified filename: success.gif
+            graphic.src = "success.gif";
+            
+            document.querySelector('.buttons').style.display = 'none';
+
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+        });
+    </script>
+
+</body>
+</html>
